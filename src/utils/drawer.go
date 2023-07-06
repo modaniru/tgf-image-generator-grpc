@@ -28,6 +28,39 @@ func DrawHeaderSquareWithShadow(c *gg.Context, xPos, yPos, width, height float64
 	return nil
 }
 
+func DrawInputedUsers(c *gg.Context, x, y, w, h float64, user *pkg.ResponseUser, images map[string]image.Image) error {
+	c.Identity()
+	c.SetHexColor("#0000007D")
+	c.DrawRectangle(x+5, y+5, w, h)
+	c.Fill()
+
+	c.SetHexColor("#EA5D72")
+	c.DrawRectangle(x, y, w, h)
+	c.Fill()
+	c.Push()
+	{
+		c.Identity()
+		image := images[user.DisplayName]
+		c.Translate(-60, 0)
+		c.Scale(0.2, 0.2)
+		c.SetHexColor("#fff")
+		c.DrawCircle(x*5+w*5/2, y*5+h*5/2, float64(image.Bounds().Dx())/2)
+		c.Fill()
+		c.DrawCircle(x*5+w*5/2, y*5+h*5/2, float64(image.Bounds().Dx())/2)
+		c.Clip()
+		c.DrawImageAnchored(image, int(x*5+w*5/2), int(y*5+h*5/2), 0.5, 0.5)
+		c.ResetClip()
+	}
+	c.Pop()
+	err := c.LoadFontFace("fonts\\B612-Bold.ttf", float64(CalculateFontSize(w-60, 40, len(user.DisplayName))))
+	if err != nil {
+		return err
+	}
+	c.SetHexColor("#fff")
+	c.DrawStringAnchored(user.DisplayName, x+w*0.4, y+h*0.5, 0, 0.5)
+	return nil
+}
+
 func FillWithGradient(c *gg.Context, x, y, w, h float64, colors ...color.Color) error {
 	if len(colors) < 2 {
 		return errors.New("colors length must be greater that 1")
@@ -52,19 +85,22 @@ func CreateGradient(x, y, w, h float64, colors ...color.Color) gg.Gradient {
 
 // todo create enum of static images
 func DrawFragment(c *gg.Context, x, y, w, h float64, streamer *pkg.ResponseUser, oldest *pkg.ResponseUser, date string, images map[string]image.Image) error {
+
 	date = string(date[:10])
 	c.Identity()
 	c.SetHexColor("#0000007D")
 	c.DrawRectangle(x+5, y+5, w, h)
 	c.Fill()
 
-	c.SetHexColor("#DCDCDC")
+	c.SetHexColor("#E3879E")
 	c.DrawRectangle(x, y, w, h)
 	c.Fill()
 	c.Push()
+
 	{
 		c.Identity()
 		image := images[oldest.DisplayName]
+
 		c.Translate(50, -80)
 		c.Scale(0.2, 0.2)
 		c.SetHexColor("#fff")
@@ -72,7 +108,6 @@ func DrawFragment(c *gg.Context, x, y, w, h float64, streamer *pkg.ResponseUser,
 		c.Fill()
 		c.DrawCircle(x*5+w*5/2, y*5+h*5/2, float64(image.Bounds().Dx())/2)
 		c.Clip()
-		c.AsMask()
 		c.DrawImageAnchored(image, int(x*5+w*5/2), int(y*5+h*5/2), 0.5, 0.5)
 		c.ResetClip()
 	}
@@ -81,16 +116,20 @@ func DrawFragment(c *gg.Context, x, y, w, h float64, streamer *pkg.ResponseUser,
 	//Переместить сюда бг и маску?
 	c.Push()
 	{
+
 		c.Identity()
+
 		image := images[streamer.DisplayName]
+
 		c.Translate(0, -20)
 		c.Scale(0.45, 0.45)
 		c.SetHexColor("#fff")
+
 		c.DrawCircle(x*(1/0.45)+w*(1/0.45)/2, y*(1/0.45)+h*(1/0.45)/2, float64(image.Bounds().Dx())/2)
 		c.Fill()
 		c.DrawCircle(x*(1/0.45)+w*(1/0.45)/2, y*(1/0.45)+h*(1/0.45)/2, float64(image.Bounds().Dx())/2)
 		c.Clip()
-		c.AsMask()
+
 		c.DrawImageAnchored(image, int(x*(1/0.45)+w*(1/0.45)/2), int(y*(1/0.45)+h*(1/0.45)/2), 0.5, 0.5)
 		c.ResetClip()
 	}
@@ -102,9 +141,9 @@ func DrawFragment(c *gg.Context, x, y, w, h float64, streamer *pkg.ResponseUser,
 		if err != nil {
 			return err
 		}
-		//c.RotateAbout(gg.Radians(30), x+w/2, y+h/2)
-		c.Translate(50, -115)
+		c.Translate(70, -110)
 		c.Scale(0.1, 0.1)
+		c.RotateAbout(gg.Radians(30), x*10+w*5, y*10+h*5)
 		c.DrawImageAnchored(crown, int(x*10+w*5), int(y*10+h*5), 0.5, 0.5)
 	}
 	c.Pop()
@@ -112,14 +151,15 @@ func DrawFragment(c *gg.Context, x, y, w, h float64, streamer *pkg.ResponseUser,
 	if err != nil {
 		return err
 	}
-	c.SetHexColor("#636363")
+	c.SetHexColor("#fff")
 	c.DrawString(date, x+w*0.05, y+h*0.1)
 	err = c.LoadFontFace("fonts\\B612-Bold.ttf", float64(CalculateFontSize(w-20, 40, len(streamer.DisplayName))))
 	if err != nil {
 		return err
 	}
-	c.SetHexColor("#000")
+	c.SetHexColor("#fff")
 	c.DrawStringAnchored(streamer.DisplayName, x+w/2, y+h*0.8, 0.5, 0.5)
+
 	return nil
 }
 

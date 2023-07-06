@@ -2,10 +2,8 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"image"
 	"image/color"
-	"time"
 
 	"github.com/fogleman/gg"
 	pkg "github.com/modaniru/image-generator/pkg/proto"
@@ -22,7 +20,6 @@ func NewService(tgfClient *client.TgfClient) *Service {
 }
 
 func (s *Service) GenerateImage(nicknames []string) (image.Image, error) {
-	now := time.Now()
 	res, err := s.tgfClient.GetGeneralFollows(context.Background(), &pkg.GetTGFRequest{Usernames: nicknames})
 	if err != nil {
 		return nil, err
@@ -36,9 +33,15 @@ func (s *Service) GenerateImage(nicknames []string) (image.Image, error) {
 	if rowsCount*5 < followsCount {
 		rowsCount++
 	}
-
+	inputCount := len(res.InputedUsers)
+	inputedUsersRows := inputCount / 5
+	if inputedUsersRows*5 < inputCount {
+		inputedUsersRows++
+	}
+	inputUserCardHeight := 100.0
 	cardHeight := 240.0
-	Height += float64(rowsCount) * cardHeight
+	iHeight := inputUserCardHeight * float64(inputedUsersRows)
+	Height += float64(rowsCount)*cardHeight + iHeight
 
 	c := gg.NewContext(int(Width), int(Height))
 
@@ -54,7 +57,6 @@ func (s *Service) GenerateImage(nicknames []string) (image.Image, error) {
 		userMap[v.DisplayName] = v
 	}
 
-	count := 0
 	imageMap := make(map[string]image.Image)
 
 	channel := make(chan *utils.Response)
@@ -68,8 +70,23 @@ func (s *Service) GenerateImage(nicknames []string) (image.Image, error) {
 		resp := <-channel
 		imageMap[resp.Name] = resp.Image
 	}
-
-	for i := 240.0; i < Height; i += cardHeight {
+	iCount := len(res.InputedUsers)
+	count := 0
+	for i := 240.0; i < 240+iHeight; i += inputUserCardHeight {
+		for j := 20.0; j < Width; j += 220 {
+			user := res.InputedUsers[count]
+			utils.DrawInputedUsers(c, j, i, 200, inputUserCardHeight-20, user, imageMap)
+			count++
+			if iCount == count {
+				break
+			}
+		}
+		if iCount == count {
+			break
+		}
+	}
+	count = 0
+	for i := 240.0 + iHeight; i < Height; i += cardHeight {
 		for j := 20.0; j < Width; j += 220 {
 			streamer := res.GeneralStreamers[count]
 			utils.DrawFragment(c, j, i, 200, cardHeight-20, streamer.Streamer, userMap[streamer.OldestUser.Username], streamer.OldestUser.Date, imageMap)
@@ -84,6 +101,5 @@ func (s *Service) GenerateImage(nicknames []string) (image.Image, error) {
 	}
 
 	c.SavePNG("result.png")
-	fmt.Println(time.Now().Sub(now).Seconds())
 	return c.Image(), nil
 }

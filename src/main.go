@@ -9,6 +9,7 @@ import (
 )
 
 // Проблема вставки шрифта  в картинку
+// Проблема долгой загрузки РЕШЕНО
 
 func main() {
 	conn, err := grpc.Dial("localhost:8080", grpc.WithInsecure())
@@ -18,7 +19,7 @@ func main() {
 	defer conn.Close()
 	tgf := client.NewTgfClient(conn)
 	service := service.NewService(tgf)
-	_, err = service.GenerateImage([]string{"kalesko"})
+	_, err = service.GenerateImage([]string{"snivanov"})
 	if err != nil {
 		log.Fatal(err.Error())
 	}
