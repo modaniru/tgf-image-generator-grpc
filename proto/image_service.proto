@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package pkg;
+
+option go_package = "github.com/modaniru/image-generator/pkg";
+
+service ImageService{
+    rpc GetGeneralFollowsImage(GeneralFollowsImageRequest) returns (GeneralFollowsImageResponse);
+}
+
+message GeneralFollowsImageRequest{
+    repeated string nicknames = 1;
+}
+
+message GeneralFollowsImageResponse{
+    bytes image = 1;
+}
