@@ -44,7 +44,7 @@ func (im *ImageGeneratorService) mapping(response *pkg.GetTGFResponse) ([]*draw.
 	for _, i := range response.InputedUsers {
 		go im.httpClient.GetImageFromURI(i, channel)
 	}
-	for _ = range response.InputedUsers {
+	for range response.InputedUsers {
 		u := <-channel
 		if u == nil {
 			return nil, nil, errors.New("user load immage error")
@@ -59,7 +59,7 @@ func (im *ImageGeneratorService) mapping(response *pkg.GetTGFResponse) ([]*draw.
 		}
 		go im.httpClient.GetImageFromURI(s.Streamer, channel)
 	}
-	for _ = range response.GeneralStreamers {
+	for range response.GeneralStreamers {
 		u := <-channel
 		if u == nil {
 			return nil, nil, errors.New("user load immage error")
