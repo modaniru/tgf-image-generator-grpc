@@ -16,7 +16,7 @@ func LoadPngImages(folderPath string) (map[string]image.Image, error) {
 	}
 	res := make(map[string]image.Image)
 	for _, file := range files {
-		fileName := strings.Split(file, "\\")[1]
+		fileName := strings.Split(file, "/")[1]
 		img, err := gg.LoadImage(file)
 		if err != nil {
 			return nil, err

@@ -16,7 +16,7 @@ type ImageGeneratorService struct {
 	drawerService *DrawerService
 }
 
-func NewService(tgfClient *client.TgfClient, httpClient *client.HttpClient, drawService *DrawerService) *ImageGeneratorService {
+func NewImageGeneratorService(tgfClient *client.TgfClient, httpClient *client.HttpClient, drawService *DrawerService) *ImageGeneratorService {
 	return &ImageGeneratorService{
 		drawerService: drawService,
 		tgfClient:     tgfClient,

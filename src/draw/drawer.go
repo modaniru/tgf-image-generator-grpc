@@ -36,7 +36,7 @@ func (d *Drawer) DrawHeader(x, y, w, h float64, title string) error {
 func (d *Drawer) DrawText(c *gg.Context, x, y, w, h, hor, ver float64, title string, color color.Color) error {
 	c.Push()
 	{
-		err := c.LoadFontFace("fonts\\B612-Bold.ttf", float64(utils.CalculateFontSize(w, h, len(title))))
+		err := c.LoadFontFace("fonts/B612-Bold.ttf", float64(utils.CalculateFontSize(w, h, len(title))))
 		if err != nil {
 			return err
 		}
