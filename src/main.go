@@ -17,7 +17,6 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-// TODO documentation in README.md
 // TODO file cross platform
 func main() {
 	// Load .env file if exists

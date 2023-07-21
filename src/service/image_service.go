@@ -24,7 +24,6 @@ func NewImageGeneratorService(tgfClient *client.TgfClient, httpClient *client.Ht
 	}
 }
 
-// TODO Refactor
 func (im *ImageGeneratorService) GenerateImage(nicknames []string) (image.Image, error) {
 	response, err := im.tgfClient.GetGeneralFollows(context.Background(), &pkg.GetTGFRequest{Usernames: nicknames})
 	if err != nil {
