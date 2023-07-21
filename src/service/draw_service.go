@@ -77,9 +77,5 @@ func (d *DrawerService) DrawImage(inputedUsers []*draw.TwitchUser, streamers []*
 			bottom += streamerCardHeight + streamerCardMargin
 		}
 	}
-	err := context.SavePNG("result.png")
-	if err != nil {
-		return nil, err
-	}
 	return context.Image(), nil
 }
