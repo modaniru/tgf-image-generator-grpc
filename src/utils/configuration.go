@@ -6,17 +6,17 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const(
+const (
 	defaultPort = "8080"
 )
 
-func LoadConfig(){
+func LoadConfig() {
 	_ = godotenv.Load()
 }
 
-func GetPort() string{
+func GetPort() string {
 	port := os.Getenv("PORT")
-	if len(port) == 0{
+	if len(port) == 0 {
 		return defaultPort
 	}
 	return port

@@ -39,20 +39,22 @@ func main() {
 	ImageServer := server.NewImageServiceServer(imageGeneratorService)
 
 	// create listener
-	listener, err := net.Listen("tcp", "localhost:" + utils.GetPort())
+	listener, err := net.Listen("tcp", ":"+utils.GetPort())
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	// create server
 	grpcServer := grpc.NewServer()
-	pkg.RegisterImageServiceServer(grpcServer, ImageServer)
 	// reflection
 	reflection.Register(grpcServer)
-	grpcServer.Serve(listener)
+	pkg.RegisterImageServiceServer(grpcServer, ImageServer)
+	if err := grpcServer.Serve(listener); err != nil{
+		log.Fatal(err.Error())
+	}
 }
 
 // default image style
-func getImageStyle() *draw.ImageStyle{
+func getImageStyle() *draw.ImageStyle {
 	return &draw.ImageStyle{
 		Background: []color.Color{color.RGBA{196, 113, 242, 255}, color.White, color.RGBA{247, 108, 198, 255}},
 		HeaderStyle: draw.HeaderStyle{

@@ -1,7 +1,6 @@
 package draw
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 
@@ -23,7 +22,6 @@ func NewDrawer(c *gg.Context, staticImages map[string]image.Image, style *ImageS
 
 // Рисует header картинки
 func (d *Drawer) DrawHeader(x, y, w, h float64, title string) error {
-	fmt.Printf("%+v\n", d.style.HeaderStyle.Background)
 	d.DrawRectangleGradient(x, y, w, h, d.style.HeaderStyle.Background)
 	err := d.DrawText(d.c, x+w/2, y+h/2, w, h, 0.5, 0.5, "Twitch General Follows", d.style.HeaderStyle.TextColors)
 	if err != nil {
