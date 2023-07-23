@@ -59,19 +59,19 @@ You can change port *check* [about .env](https://github.com/modaniru/tgf-image-g
 
 ## Docker
 soon
-<!-- run from **Docker Hub**
+run from **Docker Hub**
 ~~~bash
-docker run -p 8080:8080 -e TWITCH_CLIENT_ID=clientId -e TWITCH_CLIENT_SECRET=clientSecert modaniru/tgf
+docker run -p 8080:8080 -e TGF_SERVICE_HOST=your-url modaniru/tgf-image-generator:latest
 ~~~
 or
 ~~~bash
-docker run -p 8080:8080 --env-file path modaniru/tgf
+docker run -p 8080:8080 --env-file path modaniru/tgf-image-generator:latest
 ~~~
 **build** and run docker container
 ~~~bash
 docker build -t imageName .
 docker run --env-file path -p 8080:8080 imageName
-~~~ -->
+~~~
 
 ## Environment variables
 
@@ -81,7 +81,7 @@ docker run --env-file path -p 8080:8080 imageName
 ~~~
 
 ## Tasks
-- [ ] Docker
+- [x] Docker
 - [x] CI/CD
 - [ ] Tests
 - [ ] Crossplatform working with files (now: Linux)
